@@ -1,4 +1,4 @@
-// Palavras ruins
+// Palavras ruins - preposições, artigos, etc
 const palavrasRuins = new Set([
   "de",
   "a",
@@ -165,7 +165,7 @@ const palavrasRuins = new Set([
   "houveriam",
 ]);
 
-// Palavras agrupadas
+// Palavras com o mesmo significado
 const palavrasAgrupadas = {
   programação: "programação",
   programador: "programação",
@@ -174,17 +174,25 @@ const palavrasAgrupadas = {
   computador: "computação",
   computadores: "computação",
   computacional: "computação",
+  tecnologia: "tecnologia",
+  tecnologias: "tecnologia",
+  tecnológico: "tecnologia",
+  tecnológica: "tecnologia",
+  tecnológicos: "tecnologia",
+  tecnológicas: "tecnologia",
 };
 
 function pegaPalavrasChave(texto) {
   // Quebra o texto em palavras com regex
-  let palavras = texto.split(/[^A-Za-z]+/);
+  let palavras = texto.split(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/);
 
   // Converte todas as palavras para minúsculas
   for (let i = 0; i < palavras.length; i++) {
-    palavras[i] = palavras[i].toLowerCase();
+    let palavra = palavras[i];
+    palavra = palavra.toLowerCase();
   }
 
+  // ! Verificar se há outro jeito de fazer isso (sem has e push)
   // Remove palavras ruins
   let palavrasFiltradas = [];
   for (let i = 0; i < palavras.length; i++) {
@@ -193,7 +201,7 @@ function pegaPalavrasChave(texto) {
     }
   }
 
-  // Agrupa palavras (pato, pata, etc)
+  // Agrupa palavras de mesmo significado (computação, computador, etc)
   for (let i = 0; i < palavrasFiltradas.length; i++) {
     if (palavrasAgrupadas[palavrasFiltradas[i]]) {
       palavrasFiltradas[i] = palavrasAgrupadas[palavrasFiltradas[i]];
@@ -224,6 +232,7 @@ function pegaPalavrasChave(texto) {
 
   // Pega apenas as palavras-chave
   let resultado = [];
+  // ! Aqui depois podemos delimitar a quantidade de palavras (let i = 0; i < 5; i++)
   for (let i = 0; i < palavrasImportantes.length; i++) {
     resultado.push(palavrasImportantes[i][0]);
   }
@@ -232,7 +241,7 @@ function pegaPalavrasChave(texto) {
 }
 
 // Faz a verificação quando o botão é clicado e adiciona o resultado ao HTML
-document.getElementById("processarTexto").addEventListener("click", () => {
+document.getElementById("processarTexto").addEventListener("click", function() {
   const textoEntrada = document.getElementById("textoEntrada").value;
   const palavrasImportantes = pegaPalavrasChave(textoEntrada);
   document.getElementById(
