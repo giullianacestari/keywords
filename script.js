@@ -127,72 +127,58 @@ const palavrasRuins = new Set([
   "estava",
   "estávamos",
   "estavam",
-  "estivera",
-  "estivéramos",
-  "esteja",
-  "estejamos",
-  "estejam",
-  "estivesse",
-  "estivéssemos",
-  "estivessem",
-  "estiver",
-  "estivermos",
-  "estiverem",
-  "hei",
-  "há",
-  "havemos",
-  "hão",
-  "houve",
-  "houvemos",
-  "houveram",
-  "houvera",
-  "houvéramos",
-  "haja",
-  "hajamos",
-  "hajam",
-  "houvesse",
-  "houvéssemos",
-  "houvessem",
-  "houver",
-  "houvermos",
-  "houverem",
-  "houverei",
-  "houverá",
-  "houveremos",
-  "houverão",
-  "houveria",
-  "houveríamos",
-  "houveriam",
 ]);
 
 // Palavras com o mesmo significado
 const palavrasAgrupadas = {
-  programação: "programação",
-  programador: "programação",
-  programadora: "programação",
-  computação: "computação",
+  tecnológic: "tecnologia",
+  tecnologi: "tecnologia",
   computador: "computação",
-  computadores: "computação",
   computacional: "computação",
-  tecnologia: "tecnologia",
-  tecnologias: "tecnologia",
-  tecnológico: "tecnologia",
-  tecnológica: "tecnologia",
-  tecnológicos: "tecnologia",
-  tecnológicas: "tecnologia",
+
+  // adicionar mais
 };
+
+// Tenta extrair a raiz da palavra
+function stem(palavra) {
+  // Plurais "s", "es", "is"
+  if (palavra.endsWith("es") || palavra.endsWith("is")) {
+    palavra = palavra.slice(0, -2);
+  } else if (palavra.endsWith("s")) {
+    palavra = palavra.slice(0, -1);
+  }
+
+  // Terminações feminino e masculino "a", "o"
+  if (palavra.endsWith("a") || palavra.endsWith("o")) {
+    palavra = palavra.slice(0, -1);
+  }
+
+  // Verbos no infinitivo "ar", "er", "ir"
+  if (
+    palavra.endsWith("ar") ||
+    palavra.endsWith("er") ||
+    palavra.endsWith("ir")
+  ) {
+    palavra = palavra.slice(0, -2);
+  }
+
+  // Diminutivos "inho", "inha"
+  if (palavra.endsWith("inh")) {
+    palavra = palavra.slice(0, -3);
+  }
+
+  return palavra;
+}
 
 function pegaPalavrasChave(texto) {
   // Quebra o texto em palavras com regex
-  let palavras = texto.split(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/);
+  let palavras = texto.split(/[\W_]+/);
 
   // Converte todas as palavras para minúsculas
   for (let i = 0; i < palavras.length; i++) {
-    let palavra = palavras[i];
-    palavra = palavra.toLowerCase();
+    palavras[i] = palavras[i].toLowerCase();
   }
 
-  // ! Verificar se há outro jeito de fazer isso (sem has e push)
   // Remove palavras ruins
   let palavrasFiltradas = [];
   for (let i = 0; i < palavras.length; i++) {
@@ -201,10 +187,15 @@ function pegaPalavrasChave(texto) {
     }
   }
 
-  // Agrupa palavras de mesmo significado (computação, computador, etc)
+  // Aplica stemming e agrupa palavras de mesmo significado
   for (let i = 0; i < palavrasFiltradas.length; i++) {
-    if (palavrasAgrupadas[palavrasFiltradas[i]]) {
-      palavrasFiltradas[i] = palavrasAgrupadas[palavrasFiltradas[i]];
+    let palavraReduzida = stem(palavrasFiltradas[i]);
+
+    // Verifica se a palavra está no grupo de palavras agrupadas
+    if (palavrasAgrupadas[palavraReduzida]) {
+      palavrasFiltradas[i] = palavrasAgrupadas[palavraReduzida];
+    } else {
+      palavrasFiltradas[i] = palavraReduzida;
     }
   }
 
@@ -222,31 +213,30 @@ function pegaPalavrasChave(texto) {
   }
 
   // Ordena as palavras por frequência
-  let palavrasImportantes = [];
+  let palavrasRelevantes = [];
   for (let palavra in frequencia) {
-    palavrasImportantes.push([palavra, frequencia[palavra]]);
+    palavrasRelevantes.push([palavra, frequencia[palavra]]);
   }
-  palavrasImportantes.sort(function (a, b) {
+  palavrasRelevantes.sort(function (a, b) {
     return b[1] - a[1];
   });
 
   // Pega apenas as palavras-chave
   let resultado = [];
+
   // ! Aqui depois podemos delimitar a quantidade de palavras (let i = 0; i < 5; i++)
-  for (let i = 0; i < palavrasImportantes.length; i++) {
-    resultado.push(palavrasImportantes[i][0]);
+  for (let i = 0; i < palavrasRelevantes.length; i++) {
+    resultado.push(palavrasRelevantes[i][0]);
   }
 
   return resultado;
 }
 
 // Faz a verificação quando o botão é clicado e adiciona o resultado ao HTML
-document.getElementById("processarTexto").addEventListener("click", function() {
-  const textoEntrada = document.getElementById("textoEntrada").value;
-  const palavrasImportantes = pegaPalavrasChave(textoEntrada);
-  document.getElementById(
-    "resultado"
-  ).innerHTML = `<strong>Palavras Importantes:</strong> ${palavrasImportantes.join(
-    ", "
-  )}`;
-});
+document
+  .getElementById("processarTexto")
+  .addEventListener("click", function () {
+    const textoEntrada = document.getElementById("textoEntrada").value;
+    const palavrasRelevantes = pegaPalavrasChave(textoEntrada);
+    document.getElementById("resultado").textContent = `PALAVRAS-CHAVE:  ${palavrasRelevantes.join(", ")}`;
+  });
