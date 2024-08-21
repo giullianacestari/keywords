@@ -1,3 +1,13 @@
+// Busca o botão
+let botaoProcessarTexto = document.getElementById("processarTexto");
+
+botaoProcessarTexto.addEventListener("click", function () {
+  let textoEntrada = document.getElementById("textoEntrada").value;
+  let palavrasChave = pegaPalavrasChave(textoEntrada);
+  let resultado = document.getElementById("resultado");
+  resultado.textContent = palavrasChave.join(", ");
+});
+
 // Palavras ruins - preposições, artigos, etc
 const palavrasRuins = new Set([
   "de",
@@ -135,36 +145,20 @@ const palavrasAgrupadas = {
   tecnologi: "tecnologia",
   computador: "computação",
   computacional: "computação",
-
-  // adicionar mais
+  alun: "aluno",
+  // adicionar mais e reconhecer limites dessa alternativa
 };
 
-// Tenta extrair a raiz da palavra
-function stem(palavra) {
-  // Plurais "s", "es", "is"
+// Extrai o radical da palavra
+function reduzPalavra(palavra) {
+  // Plurais "es", "is" - 2 letras
   if (palavra.endsWith("es") || palavra.endsWith("is")) {
     palavra = palavra.slice(0, -2);
-  } else if (palavra.endsWith("s")) {
+  }
+
+  // Terminações feminino e masculino "a", "o" e plural "s" - 1 letra
+  if (palavra.endsWith("a") || palavra.endsWith("o") || palavra.endsWith("s")) {
     palavra = palavra.slice(0, -1);
-  }
-
-  // Terminações feminino e masculino "a", "o"
-  if (palavra.endsWith("a") || palavra.endsWith("o")) {
-    palavra = palavra.slice(0, -1);
-  }
-
-  // Verbos no infinitivo "ar", "er", "ir"
-  if (
-    palavra.endsWith("ar") ||
-    palavra.endsWith("er") ||
-    palavra.endsWith("ir")
-  ) {
-    palavra = palavra.slice(0, -2);
-  }
-
-  // Diminutivos "inho", "inha"
-  if (palavra.endsWith("inh")) {
-    palavra = palavra.slice(0, -3);
   }
 
   return palavra;
@@ -172,71 +166,68 @@ function stem(palavra) {
 
 function pegaPalavrasChave(texto) {
   // Quebra o texto em palavras com regex
-  let palavras = texto.split(/[\W_]+/);
+  let palavras = texto.split(/\P{L}+/u);
 
   // Converte todas as palavras para minúsculas
   for (let i = 0; i < palavras.length; i++) {
     palavras[i] = palavras[i].toLowerCase();
   }
 
-  // Remove palavras ruins
-  let palavrasFiltradas = [];
+  // Remove as palavras ruins
+  let palavrasBoas = [];
   for (let i = 0; i < palavras.length; i++) {
-    if (!palavrasRuins.has(palavras[i])) {
-      palavrasFiltradas.push(palavras[i]);
+    if (!palavrasRuins.has(palavras[i]) && palavras[i].length > 2) {
+      palavrasBoas.push(palavras[i]);
     }
   }
 
   // Aplica stemming e agrupa palavras de mesmo significado
-  for (let i = 0; i < palavrasFiltradas.length; i++) {
-    let palavraReduzida = stem(palavrasFiltradas[i]);
+  for (let i = 0; i < palavrasBoas.length; i++) {
+    let palavraReduzida = reduzPalavra(palavrasBoas[i]);
 
-    // Verifica se a palavra está no grupo de palavras agrupadas
+    // Se a palavra reduzida está no grupo de palavras agrupadas (de mesmo significado):
     if (palavrasAgrupadas[palavraReduzida]) {
-      palavrasFiltradas[i] = palavrasAgrupadas[palavraReduzida];
+      palavrasBoas[i] = palavrasAgrupadas[palavraReduzida];
     } else {
-      palavrasFiltradas[i] = palavraReduzida;
+      palavrasBoas[i] = palavraReduzida;
     }
   }
 
   // Conta a frequência de cada palavra
   const frequencia = {};
-  for (let i = 0; i < palavrasFiltradas.length; i++) {
-    let palavra = palavrasFiltradas[i];
-    if (palavra) {
-      if (frequencia[palavra]) {
-        frequencia[palavra]++;
-      } else {
-        frequencia[palavra] = 1;
-      }
+  for (let i = 0; i < palavrasBoas.length; i++) {
+    let palavra = palavrasBoas[i];
+    if (frequencia[palavra]) {
+      frequencia[palavra]++;
+    } else {
+      frequencia[palavra] = 1;
     }
   }
 
   // Ordena as palavras por frequência
-  let palavrasRelevantes = [];
+  let palavrasOrdenadas = [];
   for (let palavra in frequencia) {
-    palavrasRelevantes.push([palavra, frequencia[palavra]]);
+    palavrasOrdenadas.push([palavra, frequencia[palavra]]);
   }
-  palavrasRelevantes.sort(function (a, b) {
+  palavrasOrdenadas.sort(function (a, b) {
     return b[1] - a[1];
   });
+
+  // Pega as 10 palavras mais frequentes
+  palavrasOrdenadas = palavrasOrdenadas.slice(0, 10);
+
+  // Se há palavra radicalizada entre as 10 mais frequentes:
+  if (palavrasOrdenadas.includes(palavrasBoas)) {
+    // Volta a palavra pra forma original, descrita em palavrasAgrupadas
+    palavrasOrdenadas = palavrasAgrupadas;
+  }
 
   // Pega apenas as palavras-chave
   let resultado = [];
 
-  // ! Aqui depois podemos delimitar a quantidade de palavras (let i = 0; i < 5; i++)
-  for (let i = 0; i < palavrasRelevantes.length; i++) {
-    resultado.push(palavrasRelevantes[i][0]);
+  for (let i = 0; i < palavrasOrdenadas.length; i++) {
+    resultado.push(palavrasOrdenadas[i][0]);
   }
 
   return resultado;
 }
-
-// Faz a verificação quando o botão é clicado e adiciona o resultado ao HTML
-document
-  .getElementById("processarTexto")
-  .addEventListener("click", function () {
-    const textoEntrada = document.getElementById("textoEntrada").value;
-    const palavrasRelevantes = pegaPalavrasChave(textoEntrada);
-    document.getElementById("resultado").textContent = `PALAVRAS-CHAVE:  ${palavrasRelevantes.join(", ")}`;
-  });
