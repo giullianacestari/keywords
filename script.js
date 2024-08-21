@@ -154,10 +154,13 @@ function reduzPalavra(palavra) {
   // Plurais "es", "is" - 2 letras
   if (palavra.endsWith("es") || palavra.endsWith("is")) {
     palavra = palavra.slice(0, -2);
+  } else if (palavra.endsWith("s")) {
+    // Plural "s" - 1 letra
+    palavra = palavra.slice(0, -1);
   }
 
-  // Terminações feminino e masculino "a", "o" e plural "s" - 1 letra
-  if (palavra.endsWith("a") || palavra.endsWith("o") || palavra.endsWith("s")) {
+  // Terminações feminino e masculino "a", "o" - 1 letra
+  if (palavra.endsWith("a") || palavra.endsWith("o")) {
     palavra = palavra.slice(0, -1);
   }
 
