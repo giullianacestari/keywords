@@ -149,44 +149,26 @@ const palavrasAgrupadas = {
   // adicionar mais e reconhecer limites dessa alternativa
 };
 
-// Extrai o radical da palavra
-function reduzPalavra(palavra) {
-  // Plurais "es", "is" - 2 letras
-  if (palavra.endsWith("es") || palavra.endsWith("is")) {
-    palavra = palavra.slice(0, -2);
-  } else if (palavra.endsWith("s")) {
-    // Plural "s" - 1 letra
-    palavra = palavra.slice(0, -1);
-  }
-
-  // Terminações feminino e masculino "a", "o" - 1 letra
-  if (palavra.endsWith("a") || palavra.endsWith("o")) {
-    palavra = palavra.slice(0, -1);
-  }
-
-  return palavra;
-}
-
 function pegaPalavrasChave(texto) {
   // Quebra o texto em palavras com regex
   let palavras = texto.split(/\P{L}+/u);
 
   // Converte todas as palavras para minúsculas
-  for (let i = 0; i < palavras.length; i++) {
+  for (let i in palavras) {
     palavras[i] = palavras[i].toLowerCase();
   }
 
   // Remove as palavras ruins
   let palavrasBoas = [];
-  for (let i = 0; i < palavras.length; i++) {
+  for (let i in palavras) {
     if (!palavrasRuins.has(palavras[i]) && palavras[i].length > 2) {
       palavrasBoas.push(palavras[i]);
     }
   }
 
   // Aplica stemming e agrupa palavras de mesmo significado
-  for (let i = 0; i < palavrasBoas.length; i++) {
-    let palavraReduzida = reduzPalavra(palavrasBoas[i]);
+  for (let i in palavrasBoas) {
+    let palavraReduzida = palavrasBoas[i];
 
     // Se a palavra reduzida está no grupo de palavras agrupadas (de mesmo significado):
     if (palavrasAgrupadas[palavraReduzida]) {
@@ -198,7 +180,7 @@ function pegaPalavrasChave(texto) {
 
   // Conta a frequência de cada palavra
   const frequencia = {};
-  for (let i = 0; i < palavrasBoas.length; i++) {
+  for (let i in palavrasBoas) {
     let palavra = palavrasBoas[i];
     if (frequencia[palavra]) {
       frequencia[palavra]++;
@@ -228,9 +210,10 @@ function pegaPalavrasChave(texto) {
   // Pega apenas as palavras-chave
   let resultado = [];
 
-  for (let i = 0; i < palavrasOrdenadas.length; i++) {
+  for (let i in palavrasOrdenadas) {
     resultado.push(palavrasOrdenadas[i][0]);
   }
 
   return resultado;
 }
+
