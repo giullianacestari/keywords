@@ -9,18 +9,33 @@ botaoProcessarTexto.addEventListener("click", function () {
   }
 
   const frequencia = [];
-  //console.log(palavras.length);
 
   for (let i in palavras) {
     let palavra = palavras[i];
-    //console.log(palavra)
     if (frequencia[palavra]) {
       frequencia[palavra]++;
     } else {
       frequencia[palavra] = 1;
     }
   }
-  console.log(frequencia);
+
+  // Ordena as palavras por frequência
+  let palavrasOrdenadas = [];
+  for (let palavra in frequencia) {
+    palavrasOrdenadas.push([palavra, frequencia[palavra]]);
+  }
+  palavrasOrdenadas.sort(function (a, b) {
+    return b[1] - a[1];
+  });
+
+  // Pega as 10 palavras mais frequentes
+  palavrasOrdenadas = palavrasOrdenadas.slice(0, 10);
+
+  // Se há palavra radicalizada entre as 10 mais frequentes:
+  if (palavrasOrdenadas) {
+    // Volta a palavra pra forma original, descrita em palavrasAgrupadas
+    palavrasOrdenadas = palavras;
+  }
 
   let resultado = document.getElementById("resultado");
   resultado.textContent = palavras.join(", ");
