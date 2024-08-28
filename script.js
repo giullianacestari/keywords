@@ -1,11 +1,16 @@
-// Busca o botão
-let botaoProcessarTexto = document.getElementById("processarTexto");
-botaoProcessarTexto.addEventListener("click", function () {
-  let textoEntrada = document.getElementById("textoEntrada").value;
-  let palavrasChave = pegaPalavrasChave(textoEntrada);
-  let resultado = document.getElementById("resultado");
+import { palavrasRuins } from "./palavrasRuins.js";
+
+console.log(palavrasRuins);
+function processaTexto() {
+  const textoEntrada = document.getElementById("textoEntrada").value;
+  const palavrasChave = pegaPalavrasChave(textoEntrada);
+  const resultado = document.getElementById("resultado");
   resultado.textContent = palavrasChave.join(", ");
-});
+}
+
+// Busca o botão
+const botaoProcessarTexto = document.getElementById("processarTexto");
+botaoProcessarTexto.addEventListener("click", processaTexto);
 
 function pegaPalavrasChave(texto) {
   // Quebra o texto em palavras com regex
@@ -16,213 +21,46 @@ function pegaPalavrasChave(texto) {
     palavras[i] = palavras[i].toLowerCase();
   }
 
-  tiraPalavrasRuins(palavras);
+  palavras = tiraPalavrasRuins(palavras);
 
-  agrupaPalavras();
+  const frequencias = contaFrequencia(palavras);
 
-  contaFrequencia(palavrasBoas);
-
-  // Mostra as palavras ordenadas
-  let palavrasOrdenadas = [];
-  for (let palavra in frequencia) {
-    palavrasOrdenadas.push([palavra, frequencia[palavra]]);
-  }
-  palavrasOrdenadas.sort(ordenaPalavra);
-
-  // Pega as 10 palavras mais frequentes
-  palavrasOrdenadas = palavrasOrdenadas.slice(0, 10);
-
-  // Se há palavra agrupada entre as 10 mais frequentes:
-  if (palavrasOrdenadas.includes(palavrasBoas)) {
-    // Volta a palavra pra forma descrita em palavrasAgrupadas
-    palavrasOrdenadas = palavrasAgrupadas;
+  // Ordena a palavra por frequência
+  function ordenaPalavra(p1, p2) {
+    return frequencias[p2] - frequencias[p1];
   }
 
-  // Pega apenas as palavras-chave
-  let resultado = [];
-
-  for (let i in palavrasOrdenadas) {
-    resultado.push(palavrasOrdenadas[i][0]);
-  }
-
-  return resultado;
+  let ordenadas = Object.keys(frequencias).sort(ordenaPalavra);
+  return ordenadas.slice(0, 10);
 }
 
-// Palavras ruins
-const palavrasRuins = new Set([
-  "de",
-  "a",
-  "o",
-  "e",
-  "que",
-  "do",
-  "da",
-  "em",
-  "um",
-  "para",
-  "é",
-  "com",
-  "não",
-  "uma",
-  "os",
-  "no",
-  "se",
-  "na",
-  "por",
-  "mais",
-  "as",
-  "dos",
-  "como",
-  "mas",
-  "foi",
-  "ao",
-  "ele",
-  "das",
-  "tem",
-  "à",
-  "seu",
-  "sua",
-  "ou",
-  "ser",
-  "quando",
-  "muito",
-  "há",
-  "nos",
-  "já",
-  "está",
-  "eu",
-  "também",
-  "só",
-  "pelo",
-  "pela",
-  "até",
-  "isso",
-  "ela",
-  "entre",
-  "era",
-  "depois",
-  "sem",
-  "mesmo",
-  "aos",
-  "ter",
-  "seus",
-  "quem",
-  "nas",
-  "me",
-  "esse",
-  "eles",
-  "estão",
-  "você",
-  "tinha",
-  "foram",
-  "essa",
-  "num",
-  "nem",
-  "suas",
-  "meu",
-  "às",
-  "minha",
-  "têm",
-  "numa",
-  "pelos",
-  "elas",
-  "havia",
-  "seja",
-  "qual",
-  "será",
-  "nós",
-  "tenho",
-  "lhe",
-  "deles",
-  "essas",
-  "esses",
-  "pelas",
-  "este",
-  "fosse",
-  "dele",
-  "tu",
-  "te",
-  "vocês",
-  "vos",
-  "lhes",
-  "meus",
-  "minhas",
-  "teu",
-  "tua",
-  "teus",
-  "tuas",
-  "nosso",
-  "nossa",
-  "nossos",
-  "nossas",
-  "dela",
-  "delas",
-  "esta",
-  "estes",
-  "estas",
-  "aquele",
-  "aquela",
-  "aqueles",
-  "aquelas",
-  "isto",
-  "aquilo",
-  "estou",
-  "está",
-  "estamos",
-  "estão",
-  "estive",
-  "esteve",
-  "estivemos",
-  "estiveram",
-  "estava",
-  "estávamos",
-  "estavam",
-]);
-// Remove as palavras ruins
-let palavrasBoas = [];
 function tiraPalavrasRuins(palavras) {
+  const boas = [];
   for (let palavra of palavras) {
     if (!palavrasRuins.has(palavra) && palavra.length > 2) {
-      palavrasBoas.push(palavra);
+      boas.push(palavra);
     }
   }
+  return boas;
 }
 
-// Ordena a palavra por frequência
-function ordenaPalavra(a, b) {
-  return b[1] - a[1];
-}
-
-// Conta a frequência de cada palavra
-const frequencia = [];
-function contaFrequencia() {
-  for (let palavra of palavrasBoas) {
-    if (frequencia[palavra]) {
-      frequencia[palavra]++;
+function contaFrequencia(palavras) {
+  const frequencias = {};
+  for (let palavra of palavras) {
+    if (frequencias[palavra]) {
+      frequencias[palavra]++;
     } else {
-      frequencia[palavra] = 1;
+      frequencias[palavra] = 1;
     }
   }
+  return frequencias;
 }
 
-// Agrupa palavras com o mesmo significado
-const palavrasAgrupadas = {
-  tecnológic: "tecnologia",
-  tecnologi: "tecnologia",
-  computador: "computação",
-  computacional: "computação",
-  alun: "aluno",
-  // adicionar mais e reconhecer limites dessa alternativa
-};
-function agrupaPalavras() {
-  for (let i in palavrasBoas) {
-    let palavra = palavrasBoas[i];
-
-    // Se a palavra está no grupo de palavras agrupadas (de mesmo significado):
-    if (palavrasAgrupadas[palavra]) {
-      palavrasBoas[i] = palavrasAgrupadas[palavra];
-    } else {
-      palavrasBoas[i] = palavra;
-    }
-  }
-}
+// VARIACAO MENOR, se sobrar tempo?
+// function contaFrequencia() {
+//   const frequencias = {};
+//   for (let palavra of palavrasBoas) {
+//     frequencias[palavra] = (frequencias[palavra] ?? 0) + 1;
+//   }
+//   return frequencias;
+// }
