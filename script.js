@@ -1,6 +1,5 @@
 import { palavrasRuins } from "./palavrasRuins.js";
 
-console.log(palavrasRuins);
 function processaTexto() {
   const textoEntrada = document.getElementById("textoEntrada").value;
   const palavrasChave = pegaPalavrasChave(textoEntrada);
