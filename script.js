@@ -1,4 +1,4 @@
-import { palavrasRuins } from "./palavrasRuins.js";
+import { PALAVRAS_RUINS } from "./palavrasRuins.js";
 
 function processaTexto() {
   const textoEntrada = document.getElementById("textoEntrada").value;
