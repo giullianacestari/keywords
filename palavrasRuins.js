@@ -1,5 +1,5 @@
 // Palavras ruins
-export const palavrasRuins = new Set([
+export const PALAVRAS_RUINS = new Set([
   "de",
   "a",
   "o",
