@@ -36,7 +36,7 @@ function pegaPalavrasChave(texto) {
 function tiraPalavrasRuins(palavras) {
   const boas = [];
   for (let palavra of palavras) {
-    if (!palavrasRuins.has(palavra) && palavra.length > 2) {
+    if (!PALAVRAS_RUINS.has(palavra) && palavra.length > 2) {
       boas.push(palavra);
     }
   }
