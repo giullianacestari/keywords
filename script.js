@@ -10,7 +10,7 @@ let texto = document.getElementById('textoEntrada').value;
 let resultado = document.getElementById('resultado');
 //console.log(resultado)
 
-let palavras = texto.split(/\s+/);
+let palavras = texto.split(' ');
 console.log(palavras[0])
 resultado.textContent = palavras.join(', ');
 });
