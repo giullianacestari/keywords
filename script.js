@@ -2,41 +2,32 @@ let botaoProcessarTexto = document.getElementById("processarTexto");
 
 botaoProcessarTexto.addEventListener("click", function () {
   let texto = document.getElementById("textoEntrada").value;
-  let palavras = texto.split(/\s+/);
+  let palavras = texto.split(/\P{L}+/u);
 
   for (let i in palavras) {
     palavras[i] = palavras[i].toLowerCase();
   }
 
-  const frequencia = [];
+  const frequencias = {};
+  //console.log(palavras.length);
 
   for (let i in palavras) {
     let palavra = palavras[i];
-    if (frequencia[palavra]) {
-      frequencia[palavra]++;
+    //console.log(palavra)
+    if (frequencias[palavra]) {
+      frequencias[palavra]++;
     } else {
-      frequencia[palavra] = 1;
+      frequencias[palavra] = 1;
     }
   }
 
-  // Ordena as palavras por frequência
-  let palavrasOrdenadas = [];
-  for (let palavra in frequencia) {
-    palavrasOrdenadas.push([palavra, frequencia[palavra]]);
+  // Ordena a palavra por frequência
+  function ordenaPalavra(p1, p2) {
+    return frequencias[p2] - frequencias[p1];
   }
-  palavrasOrdenadas.sort(function (a, b) {
-    return b[1] - a[1];
-  });
 
-  // Pega as 10 palavras mais frequentes
-  palavrasOrdenadas = palavrasOrdenadas.slice(0, 10);
-
-  // Se há palavra radicalizada entre as 10 mais frequentes:
-  if (palavrasOrdenadas) {
-    // Volta a palavra pra forma original, descrita em palavrasAgrupadas
-    palavrasOrdenadas = palavras;
-  }
+  let ordenadas = Object.keys(frequencias).sort(ordenaPalavra);
 
   let resultado = document.getElementById("resultado");
-  resultado.textContent = palavras.join(", ");
+  resultado.textContent = ordenadas.slice(0, 10).join(", ");
 });
