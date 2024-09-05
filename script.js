@@ -1,5 +1,3 @@
-import { PALAVRAS_RUINS } from "./palavrasRuins.js";
-
 let botaoProcessarTexto = document.getElementById("processarTexto");
 
 botaoProcessarTexto.addEventListener("click", function () {
@@ -10,6 +8,7 @@ botaoProcessarTexto.addEventListener("click", function () {
     palavras[i] = palavras[i].toLowerCase();
   }
 
+  const PALAVRAS_RUINS = new Set(["de", "a", "o", "e"]);
   const boas = [];
   for (let palavra of palavras) {
     if (!PALAVRAS_RUINS.has(palavra) && palavra.length > 2) {
