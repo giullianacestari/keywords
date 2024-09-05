@@ -10,26 +10,9 @@ botaoProcessarTexto.addEventListener("click", function () {
     palavras[i] = palavras[i].toLowerCase();
   }
 
-  const boas = [];
-  for (let palavra of palavras) {
-    if (!PALAVRAS_RUINS.has(palavra) && palavra.length > 2) {
-      boas.push(palavra);
-    }
-  }
-  palavras = boas;
+  palavras = tiraPalavrasRuins(palavras);
 
-  const frequencias = {};
-  //console.log(palavras.length);
-
-  for (let i in palavras) {
-    let palavra = palavras[i];
-    //console.log(palavra)
-    if (frequencias[palavra]) {
-      frequencias[palavra]++;
-    } else {
-      frequencias[palavra] = 1;
-    }
-  }
+  const frequencias = contaFrequencia(palavras);
 
   // Ordena a palavra por frequência
   function ordenaPalavra(p1, p2) {
@@ -43,8 +26,6 @@ botaoProcessarTexto.addEventListener("click", function () {
 });
 
 function tiraPalavrasRuins(palavras) {
-  // Palavras ruins - preposições, artigos, etc
-  const PALAVRAS_RUINS = new Set(["de", "a", "o", "e"]);
   const boas = [];
   for (let palavra of palavras) {
     if (!PALAVRAS_RUINS.has(palavra) && palavra.length > 2) {
@@ -52,4 +33,16 @@ function tiraPalavrasRuins(palavras) {
     }
   }
   return boas;
+}
+
+function contaFrequencia(palavras) {
+  const frequencias = {};
+  for (let palavra of palavras) {
+    if (frequencias[palavra]) {
+      frequencias[palavra]++;
+    } else {
+      frequencias[palavra] = 1;
+    }
+  }
+  return frequencias;
 }
