@@ -8,19 +8,19 @@ botaoProcessarTexto.addEventListener("click", function () {
     palavras[i] = palavras[i].toLowerCase();
   }
 
-  const frequencia = [];
+  const frequencias = {};
   //console.log(palavras.length);
 
   for (let i in palavras) {
     let palavra = palavras[i];
     //console.log(palavra)
-    if (frequencia[palavra]) {
-      frequencia[palavra]++;
+    if (frequencias[palavra]) {
+      frequencias[palavra]++;
     } else {
-      frequencia[palavra] = 1;
+      frequencias[palavra] = 1;
     }
   }
-  console.log(frequencia);
+  console.log(frequencias);
 
   let resultado = document.getElementById("resultado");
   resultado.textContent = palavras.join(", ");
