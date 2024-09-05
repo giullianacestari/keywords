@@ -1,27 +1,16 @@
-let botaoProcessarTexto = document.getElementById("processarTexto");
+let botaoProcessarTexto = document.getElementById('processarTexto');
+//console.log(botaoProcessarTexto)
 
-botaoProcessarTexto.addEventListener("click", function () {
-  let texto = document.getElementById("textoEntrada").value;
-  let palavras = texto.split(/\s+/);
+botaoProcessarTexto.addEventListener('click', function () {
+//console.log('Clicou no botão')
 
-  for (let i in palavras) {
-    palavras[i] = palavras[i].toLowerCase();
-  }
+let texto = document.getElementById('textoEntrada').value;
+//console.log(texto.value)
 
-  const frequencia = [];
-  //console.log(palavras.length);
+let resultado = document.getElementById('resultado');
+//console.log(resultado)
 
-  for (let i in palavras) {
-    let palavra = palavras[i];
-    //console.log(palavra)
-    if (frequencia[palavra]) {
-      frequencia[palavra]++;
-    } else {
-      frequencia[palavra] = 1;
-    }
-  }
-  console.log(frequencia);
-
-  let resultado = document.getElementById("resultado");
-  resultado.textContent = palavras.join(", ");
+let palavras = texto.split(/\P{L}+/u);
+console.log(palavras[0])
+resultado.textContent = palavras.join(', ');
 });
