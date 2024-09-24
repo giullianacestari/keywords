@@ -1,16 +1,7 @@
-let botaoProcessarTexto = document.getElementById('processarTexto');
-//console.log(botaoProcessarTexto)
+const botaoMostraPalavras = document.querySelector('#botao-palavrachave');
 
-botaoProcessarTexto.addEventListener('click', function () {
-//console.log('Clicou no botão')
+botaoMostraPalavras.addEventListener('click', mostraPalavrasChave);
 
-let texto = document.getElementById('textoEntrada').value;
-//console.log(texto.value)
-
-let resultado = document.getElementById('resultado');
-//console.log(resultado)
-
-let palavras = texto.split(/\P{L}+/u);
-console.log(palavras[0])
-resultado.textContent = palavras.join(', ');
-});
+function mostraPalavrasChave() {
+  alert('fui clicado!');
+}
