@@ -38,7 +38,7 @@ h1 {
     text-transform: uppercase;
 }
 
-#textoEntrada {
+#entrada-de-texto {
     display: flex;
     height: 12rem;
     padding: 1.4rem 2.5rem 2.5rem 2.5rem;
@@ -49,14 +49,14 @@ h1 {
     background: #FFF;
 }
 
-#textoEntrada::placeholder {
+#entrada-de-texto::placeholder {
     color: #828282;
     font-size: 1.25rem;
     font-weight: 400;
     line-height: normal;
 }
 
-#processarTexto {
+#botao-palavrachave {
     display: flex;
     padding: 1.25rem;
     justify-content: center;
@@ -71,7 +71,7 @@ h1 {
     line-height: normal;
 }
 
-#resultado {
+#resultado-palavrachave {
     display: flex;
     height: 6rem;
     border-radius: 0.625rem;
