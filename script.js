@@ -5,24 +5,27 @@ botaoMostraPalavras.addEventListener('click', mostraPalavrasChave);
 function mostraPalavrasChave() {
   const texto = document.querySelector('#entrada-de-texto').value;
   const campoResultado = document.querySelector('#resultado-palavrachave');
+  const palavrasChave = processaTexto(texto);
 
-  let palavras = texto.split(/\P{L}+/u);
-
-  contaFrequencia(palavras);
-
-  campoResultado.textContent = palavras.join(', ');
+  campoResultado.textContent = palavrasChave.join(', ');
 }
 
-function contaFrequencia(palavras) {
+function processaTexto(texto){
+  let palavras = texto.split(/\P{L}+/u);
+
   for (let i in palavras) {
     palavras[i] = palavras[i].toLowerCase();
   }
 
+  contaFrequencia(palavras);
 
+  return palavras;
+
+}
+
+function contaFrequencia(palavras) {
   const frequencias = {};
-  for (let i in palavras) {
-    let palavra = palavras[i];
-    //console.log(palavra)
+  for (let palavra of palavras) {
     if (frequencias[palavra]) {
       frequencias[palavra]++;
     } else {
