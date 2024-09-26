@@ -1,21 +1,20 @@
 import { PALAVRAS_RUINS } from "./palavrasRuins.js";
 
-function processaTexto() {
-  const textoEntrada = document.getElementById("textoEntrada").value;
-  const palavrasChave = pegaPalavrasChave(textoEntrada);
-  const resultado = document.getElementById("resultado");
-  resultado.textContent = palavrasChave.join(", ");
+const botaoMostraPalavras = document.querySelector("#botao-palavrachave");
+
+botaoMostraPalavras.addEventListener("click", mostraPalavrasChave);
+
+function mostraPalavrasChave() {
+  const texto = document.querySelector("#entrada-de-texto").value;
+  const campoResultado = document.querySelector("#resultado-palavrachave");
+  const palavrasChave = processaTexto(texto);
+
+  campoResultado.textContent = palavrasChave.join(", ");
 }
 
-// Busca o botão
-const botaoProcessarTexto = document.getElementById("processarTexto");
-botaoProcessarTexto.addEventListener("click", processaTexto);
-
-function pegaPalavrasChave(texto) {
-  // Quebra o texto em palavras com regex
+function processaTexto(texto) {
   let palavras = texto.split(/\P{L}+/u);
 
-  // Converte todas as palavras para minúsculas
   for (let i in palavras) {
     palavras[i] = palavras[i].toLowerCase();
   }
@@ -34,13 +33,13 @@ function pegaPalavrasChave(texto) {
 }
 
 function tiraPalavrasRuins(palavras) {
-  const boas = [];
-  for (let palavra of palavras) {
+  const palavrasBoas = [];
+  for (let palavra of palavras) { // precisamos ensinar
     if (!PALAVRAS_RUINS.has(palavra) && palavra.length > 2) {
-      boas.push(palavra);
+      palavrasBoas.push(palavra);
     }
   }
-  return boas;
+  return palavrasBoas;
 }
 
 function contaFrequencia(palavras) {
@@ -54,12 +53,3 @@ function contaFrequencia(palavras) {
   }
   return frequencias;
 }
-
-// VARIACAO MENOR, se sobrar tempo?
-// function contaFrequencia() {
-//   const frequencias = {};
-//   for (let palavra of palavrasBoas) {
-//     frequencias[palavra] = (frequencias[palavra] ?? 0) + 1;
-//   }
-//   return frequencias;
-// }
