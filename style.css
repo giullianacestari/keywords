@@ -27,13 +27,14 @@ body {
     width: 65rem;
     flex-direction: column;
     align-items: center;
-    gap: 6rem;
+    gap: 3rem;
+    /* /margin-top: 6rem; */
 }
 
 h1 {
     color: var(--Primary-color);
     text-align: center;
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 600;
     text-transform: uppercase;
 }
@@ -73,10 +74,10 @@ h1 {
 
 #resultado-palavrachave {
     display: flex;
-    height: 6rem;
     border-radius: 0.625rem;
     align-self: stretch;
     color: var(--Primary-color);
-    font-size: 2rem;
+    font-size: 1.5rem;
     justify-content: center;
+    margin-bottom: 2rem;
 }
