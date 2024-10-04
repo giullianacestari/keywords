@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-    --Primary-color: #ED145B;
-    --gradiente-preto: linear-gradient(113deg, #000 0%, #1E2021 44.96%, #1E2022 100%);
+    --cor-destaque: #ED145B;
+    --cor-gradiente-preto: linear-gradient(113deg, #000 0%, #1E2021 44.96%, #1E2022 100%);
 }
 
 * {
@@ -16,7 +16,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 16px 21px 18px 21px;
-    background: var(--gradiente-preto);
+    background: var(--cor-gradiente-preto);
     height: 100vh;
     flex-direction: column;
 }
@@ -27,13 +27,13 @@ body {
     width: 65rem;
     flex-direction: column;
     align-items: center;
-    gap: 6rem;
+    gap: 3rem;
 }
 
 h1 {
-    color: var(--Primary-color);
+    color: var(--cor-destaque);
     text-align: center;
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 600;
     text-transform: uppercase;
 }
@@ -47,11 +47,12 @@ h1 {
     align-self: stretch;
     border-radius: 0.625rem;
     background: #FFF;
+    font-size: 2rem;
 }
 
 #entrada-de-texto::placeholder {
     color: #828282;
-    font-size: 1.25rem;
+    font-size: 2rem;
     font-weight: 400;
     line-height: normal;
 }
@@ -64,7 +65,7 @@ h1 {
     gap: 0.625rem;
     border-radius: 0.5rem;
     border: none;
-    background: var(--Primary-color, #ED145B);
+    background: var(--cor-destaque);
     color: #000;
     font-size: 2.5rem;
     font-weight: 500;
@@ -73,10 +74,10 @@ h1 {
 
 #resultado-palavrachave {
     display: flex;
-    height: 6rem;
     border-radius: 0.625rem;
     align-self: stretch;
-    color: var(--Primary-color);
-    font-size: 2rem;
+    color: var(--cor-destaque);
+    font-size: 2.5rem;
     justify-content: center;
+    margin-bottom: 2rem;
 }
